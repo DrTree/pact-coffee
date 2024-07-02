@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "domain": "pact_coffee",
+  "name": "Pact Coffee",
+  "codeowners": ["@DrTree"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "",
+  "homekit": {},
+  "iot_class": "cloud_polling",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": []
+}
