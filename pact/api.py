@@ -129,7 +129,7 @@ class PactApiClient:
         if not recurrable.active:
             return None
         _id = recurrable.current_order.id
-        new_order_response = await self.patch(
+        new_order_response = await self.client.patch(
             f"/v2/users/me/orders/{_id}",
             {
                 "amount": recurrable.amount,
