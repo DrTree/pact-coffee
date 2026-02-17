@@ -23,29 +23,36 @@ class CommunicationClient:
 
     async def patch(self, path: str, data: dict[str, any], token):
         """Inner API PATCH request."""
+        url = BASE_URL + path
+        _LOGGER.debug("PATCH %s", url)
+        _LOGGER.debug(data)
         async with self.session.patch(
             url=BASE_URL + path,
             headers={"Authorization": f"Bearer {token}"},
             timeout=30,
             json=data,
         ) as response:
+            _LOGGER.debug("Reponse received: %s", response.status)
+            _LOGGER.debug(await response.read())
             if response.status != 200:
                 raise ClientConnectionError(f"Unexpected error code {response.status}")
             json = await response.json()
-            _LOGGER.debug(await response.read())
             return json
 
     async def get(self, path: str, token):
         """Inner API get request."""
+        url = BASE_URL + path
+        _LOGGER.debug("GET %s", url)
         async with self.session.get(
-            url=BASE_URL + path,
+            url=url,
             headers={"Authorization": f"Bearer {token}"},
             timeout=30,
         ) as response:
+            _LOGGER.debug("Reponse received: %s", response.status)
+            _LOGGER.debug(await response.read())
             if response.status != 200:
                 raise ClientConnectionError(f"Unexpected error code {response.status}")
             json = await response.json()
-            _LOGGER.debug(await response.read())
             return json
 
 
@@ -90,6 +97,7 @@ class PactApiClient:
 
     async def get_token(self, force=False) -> str:
         """Return the current access token or requests a new token."""
+        _LOGGER.debug("Token requested: Force=%s, Cached Token Valid Until=%s", force, self.token_valid_until)
         if (
             not force
             and self.token_valid_until is not None

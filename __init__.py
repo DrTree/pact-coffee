@@ -72,7 +72,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: PactConfigEntry) -> bool
     # hass.services.async_register(DOMAIN, "asap", handle_service_asap)
 
     coordinator = DataUpdateCoordinator[PactCoordinatorData](
-        hass=hass, logger=_LOGGER, name="pact_coffee", update_method=perform_update
+        hass=hass, logger=_LOGGER, name="pact_coffee", update_method=perform_update,
+        update_interval=timedelta(minutes=10)
     )
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = PactRuntimeData(coordinator=coordinator, client=api)
