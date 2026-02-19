@@ -1,0 +1,27 @@
+	export default {
+		id: undefined,
+		email: undefined,
+		phone_number: undefined,
+		first_name: undefined,
+		last_name: undefined,
+		is_pioneer: false,
+		is_pod_pioneer: false,
+		opt_in: false,
+    balance: 0.0,
+		token: undefined,
+		timeOfLastPull: undefined,
+		recurrables: [],
+		coffees: [],
+		orders: [],
+		receipts: [],
+		addresses: [],
+		cards: [],
+		ordersHistory: {
+			orders: [],
+			current_page: 0,
+			max: 0
+		},
+    showSidebar: undefined,
+    employee_discount: undefined,
+    card_declined: undefined,
+	}
