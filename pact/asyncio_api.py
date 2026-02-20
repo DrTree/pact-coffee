@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import logging
 from typing import Any
 
 from aiohttp import ClientResponse, ClientSession
 from aiohttp.client_exceptions import ClientConnectionError
+
+_LOGGER = logging.getLogger(__name__)
+
 
 
 @dataclass(slots=True)
@@ -302,10 +306,19 @@ class PactAsyncioApi:
         if auth and not self._token:
             raise ClientConnectionError("No auth token configured")
 
-        headers = {"Accept": "application/json"}
+        headers: dict[str, str] = {"Accept": "application/json"}
         if auth:
             headers["Authorization"] = f"Bearer {self._token}"
 
+        _LOGGER.debug(
+            "Pact API request method=%s url=%s params=%s json=%s auth=%s headers=%s",
+            method,
+            url,
+            params,
+            json,
+            auth,
+            headers,
+        )
         async with self._session.request(
             method,
             url,
@@ -314,13 +327,25 @@ class PactAsyncioApi:
             params=params,
             timeout=self._config.timeout_seconds,
         ) as response:
-            return await self._parse_response(response)
+            response_body = await response.text()
+            _LOGGER.debug(
+                "Pact API response method=%s url=%s status=%s content_type=%s body=%s",
+                method,
+                url,
+                response.status,
+                response.content_type,
+                response_body,
+            )
+            return await self._parse_response(response, response_body)
 
-    async def _parse_response(self, response: ClientResponse) -> dict[str, Any]:
-        if response.status >= 400:
+    async def _parse_response(self, response: ClientResponse, body: str | None = None) -> dict[str, Any]:
+        if body is None:
             body = await response.text()
+        if response.status >= 400:
             raise ClientConnectionError(f"Unexpected error code {response.status}: {body}")
         if response.content_type == "application/json":
-            return await response.json()
-        text = await response.text()
-        return {"raw": text}
+            try:
+                return await response.json(content_type=None)
+            except Exception:
+                return {"raw": body}
+        return {"raw": body}

@@ -20,6 +20,13 @@ from .pact.asyncio_api import PactAsyncioApi
 _LOGGER = logging.getLogger(__name__)
 
 
+def _is_recurrable_active(recurrable: dict[str, Any]) -> bool:
+    """Return whether a recurrable should create an entity."""
+    if recurrable.get("active") is True:
+        return True
+    return str(recurrable.get("current_state", "")).lower() == "active"
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: PactConfigEntry,
@@ -42,7 +49,7 @@ async def async_setup_entry(
             config_entry.runtime_data.client,
         )
         for recurrable in coordinator.data.recurrables_dict.values()
-        if recurrable.get("active")
+        if _is_recurrable_active(recurrable)
     ]
     async_add_entities(d, True)
     _LOGGER.debug("Finished platform setup")

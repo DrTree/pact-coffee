@@ -22,6 +22,20 @@ _LOGGER = logging.getLogger(__name__)
 # For your initial PR, limit it to 1 platform.
 PLATFORMS: list[Platform] = [Platform.DATE]
 
+
+def _normalize_recurrables(payload: Any) -> list[dict[str, Any]]:
+    """Normalize recurrables payloads returned by Pact endpoints."""
+    if isinstance(payload, list):
+        return [item for item in payload if isinstance(item, dict)]
+    if isinstance(payload, dict):
+        recurrables = payload.get("recurrables")
+        if isinstance(recurrables, list):
+            return [item for item in recurrables if isinstance(item, dict)]
+        if isinstance(recurrables, dict):
+            return [item for item in recurrables.values() if isinstance(item, dict)]
+    return []
+
+
 @dataclass
 class PactCoordinatorData:
     recurrables: list[dict[str, Any]]
@@ -57,19 +71,26 @@ async def async_setup_entry(hass: HomeAssistant, entry: PactConfigEntry) -> bool
     async def _login() -> None:
         await api.login(entry.data["username"], entry.data["password"])
 
+    async def _fetch_recurrables() -> list[dict[str, Any]]:
+        switch_list = _normalize_recurrables(await api.get_recurrables_switch_list())
+        detailed: list[dict[str, Any]] = []
+        for item in switch_list:
+            recurrable_id = item.get("id")
+            if not recurrable_id:
+                continue
+            recurrable = await api.get_recurrable_by_id(str(recurrable_id))
+            if isinstance(recurrable, dict) and recurrable:
+                detailed.append(recurrable)
+        return detailed
+
     await _login()
 
     async def perform_update():
         try:
-            recurrables_response = await api.get_recurrables()
+            recurrables = await _fetch_recurrables()
         except ClientConnectionError:
             await _login()
-            recurrables_response = await api.get_recurrables()
-
-        if isinstance(recurrables_response, list):
-            recurrables = recurrables_response
-        else:
-            recurrables = recurrables_response.get("recurrables", [])
+            recurrables = await _fetch_recurrables()
 
         return PactCoordinatorData(
             recurrables=recurrables,
