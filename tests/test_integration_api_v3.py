@@ -85,7 +85,7 @@ class TestIntegrationApiV3(unittest.IsolatedAsyncioTestCase):
 
         urls = [c[1] for c in session.calls]
         base = API_V3_BASE_URL.rstrip('/')
-        self.assertIn(f'{base}/users/me/recurrables/switch_list', urls)
+        self.assertIn(f'{base}/users/me/recurrables', urls)
         self.assertIn(f'{base}/users/me/orders/88/asap', urls)
         self.assertIn(f'{base}/users/me/orders/88/reschedule', urls)
 

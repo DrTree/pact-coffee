@@ -75,7 +75,7 @@ async def async_api_request(
 
 async def async_fetch_recurrables(session: ClientSession, token: str) -> list[dict[str, Any]]:
     """Fetch current recurrables from Pact v3."""
-    payload = await async_api_request(session, token, "GET", "/users/me/recurrables/switch_list")
+    payload = await async_api_request(session, token, "GET", "/users/me/recurrables")
     if isinstance(payload, list):
         return payload
     if isinstance(payload, dict):
