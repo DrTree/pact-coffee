@@ -3,8 +3,7 @@ import unittest
 from aiohttp.client_exceptions import ClientConnectionError
 
 from api_v3 import (
-    API_BASE_URL,
-    API_VERSION,
+    API_V3_BASE_URL,
     _build_url,
     async_authenticate,
     async_fetch_recurrables,
@@ -53,7 +52,7 @@ class FakeSession:
 
 class TestUrlBuilder(unittest.TestCase):
     def test_build_url_normalizes_slashes(self):
-        expected = f"{API_BASE_URL.rstrip('/')}/{API_VERSION.strip('/')}/tokens"
+        expected = f"{API_V3_BASE_URL.rstrip('/')}/tokens"
         self.assertEqual(_build_url('tokens'), expected)
         self.assertEqual(_build_url('/tokens'), expected)
 
@@ -65,7 +64,7 @@ class TestIntegrationApiV3(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(token, 'token123')
         method, url, kwargs = session.calls[0]
         self.assertEqual(method, 'POST')
-        self.assertEqual(url, f'{API_BASE_URL.rstrip('/')}/{API_VERSION.strip('/')}/tokens')
+        self.assertEqual(url, f'{API_V3_BASE_URL.rstrip('/')}/tokens')
         self.assertEqual(kwargs['json'], {'email': 'user', 'password': 'pass'})
 
     async def test_async_authenticate_failure(self):
@@ -85,7 +84,7 @@ class TestIntegrationApiV3(unittest.IsolatedAsyncioTestCase):
         await async_reschedule_order(session, token, '88', '2026-03-04')
 
         urls = [c[1] for c in session.calls]
-        base = f'{API_BASE_URL.rstrip('/')}/{API_VERSION.strip('/')}'
+        base = API_V3_BASE_URL.rstrip('/')
         self.assertIn(f'{base}/users/me/recurrables/switch_list', urls)
         self.assertIn(f'{base}/users/me/orders/88/asap', urls)
         self.assertIn(f'{base}/users/me/orders/88/reschedule', urls)

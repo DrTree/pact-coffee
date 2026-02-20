@@ -3,22 +3,19 @@
 from __future__ import annotations
 
 import logging
-import os
 from typing import Any
 
 from aiohttp import ClientSession
 from aiohttp.client_exceptions import ClientConnectionError
 
-API_BASE_URL = os.getenv("PACT_API_BASE", "https://api.pactcoffee.com")
-API_VERSION = os.getenv("PACT_API_VERSION", "v3")
+API_V3_BASE_URL = "https://api.pactcoffee.com/v3"
 _LOGGER = logging.getLogger(__name__)
 
 
 def _build_url(path: str) -> str:
-    base = API_BASE_URL.rstrip("/")
-    version = API_VERSION.strip("/")
+    base = API_V3_BASE_URL.rstrip("/")
     suffix = path if path.startswith("/") else f"/{path}"
-    return f"{base}/{version}{suffix}"
+    return f"{base}{suffix}"
 
 
 async def async_authenticate(
@@ -78,7 +75,6 @@ async def async_api_request(
 
 async def async_fetch_recurrables(session: ClientSession, token: str) -> list[dict[str, Any]]:
     """Fetch current recurrables from Pact v3."""
-    # v3 route used by recovered frontend implementation.
     payload = await async_api_request(session, token, "GET", "/users/me/recurrables/switch_list")
     if isinstance(payload, list):
         return payload
