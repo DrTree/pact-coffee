@@ -5,15 +5,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import timedelta
 import logging
+from typing import Any
 
+from aiohttp.client_exceptions import ClientConnectionError
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import aiohttp_client
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .pact.api import PactApiClient
-from .pact.model import Recurable
+from .pact.asyncio_api import PactAsyncioApi
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -21,14 +22,10 @@ _LOGGER = logging.getLogger(__name__)
 # For your initial PR, limit it to 1 platform.
 PLATFORMS: list[Platform] = [Platform.DATE]
 
-# TODO: Import this
-DOMAIN = "pact_coffee"
-
-
 @dataclass
 class PactCoordinatorData:
-    recurrables: list[Recurable]
-    reccurables_dict: dict[str, Recurable]
+    recurrables: list[dict[str, Any]]
+    recurrables_dict: dict[str, dict[str, Any]]
 
 
 # type MyCoordinator = DataUpdateCoordinator[PactCoordinatorData]
@@ -37,7 +34,7 @@ class PactCoordinatorData:
 @dataclass
 class PactRuntimeData:
     coordinator: DataUpdateCoordinator[PactCoordinatorData]
-    client: PactApiClient
+    client: PactAsyncioApi
 
 
 # TODO Create ConfigEntry type alias with API object
@@ -54,15 +51,29 @@ async def async_setup_entry(hass: HomeAssistant, entry: PactConfigEntry) -> bool
     # TODO 3. Store an API object for your platforms to access
     # entry.runtime_data = MyAPI(...)
 
-    _LOGGER.info(entry.data)
     session = aiohttp_client.async_get_clientsession(hass, verify_ssl=False)
-    api = PactApiClient(session, entry.data["username"], entry.data["password"])
-    await api.get_token()
+    api = PactAsyncioApi(session)
+
+    async def _login() -> None:
+        await api.login(entry.data["username"], entry.data["password"])
+
+    await _login()
 
     async def perform_update():
-        recurrables = await api.recurrables()
+        try:
+            recurrables_response = await api.get_recurrables()
+        except ClientConnectionError:
+            await _login()
+            recurrables_response = await api.get_recurrables()
+
+        if isinstance(recurrables_response, list):
+            recurrables = recurrables_response
+        else:
+            recurrables = recurrables_response.get("recurrables", [])
+
         return PactCoordinatorData(
-            recurrables=recurrables, reccurables_dict={r.name: r for r in recurrables}
+            recurrables=recurrables,
+            recurrables_dict={str(r["id"]): r for r in recurrables if isinstance(r, dict) and "id" in r},
         )
 
     # async def handle_service_asap(call):
