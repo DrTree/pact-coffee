@@ -143,3 +143,21 @@ The `pact/asyncio_api.py` client now includes methods corresponding to all v3 me
 Special-case behavior retained to match front-end behavior:
 
 - `update_user_card_v3` targets `/users/me/payment_cards` on the **base URL without `/v3`**, mirroring the JS comment and call path.
+
+
+## OpenAPI / Swagger discovery attempt
+
+I attempted direct discovery of an official spec from common documentation routes under `https://api.pactcoffee.com`, including:
+
+- `/v3/openapi.json`, `/v3/openapi.yaml`
+- `/v3/swagger.json`, `/v3/swagger.yaml`
+- `/v3/api-docs`, `/v3/docs`, `/v3/redoc`
+- `/openapi.json`, `/swagger.json`, `/api-docs`
+
+In this execution environment, all direct calls to `https://api.pactcoffee.com/...` returned a tunnel `403` response, so no official machine-readable spec could be fetched.
+
+As a fallback, an inferred OpenAPI document was generated from the recovered front-end `users.js` v3 method map and added at:
+
+- `docs/pact_v3_inferred_openapi.json`
+
+This inferred spec includes 54 path templates, bearer auth scheme, and operation IDs mapped to recovered front-end method names.

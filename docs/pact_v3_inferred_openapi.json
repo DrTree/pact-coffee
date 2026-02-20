@@ -1,0 +1,1806 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Pact Coffee API v3 (inferred)",
+    "version": "0.1.0-inferred",
+    "description": "Inferred from recovered front-end source maps; not an official Pact specification."
+  },
+  "servers": [
+    {
+      "url": "https://api.pactcoffee.com/v3",
+      "description": "Primary inferred v3 base URL"
+    },
+    {
+      "url": "https://api.pactcoffee.com",
+      "description": "Base URL used by updateUserCardV3 fallback"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/tokens": {
+      "post": {
+        "operationId": "loginV3",
+        "summary": "Inferred from frontend method loginV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tokens/me": {
+      "delete": {
+        "operationId": "logoutV3",
+        "summary": "Inferred from frontend method logoutV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "operationId": "getUserInfoV3",
+        "summary": "Inferred from frontend method getUserInfoV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateUserInfoV3",
+        "summary": "Inferred from frontend method updateUserInfoV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/addresses": {
+      "get": {
+        "operationId": "getAddressesV3",
+        "summary": "Inferred from frontend method getAddressesV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "createAddressV3",
+        "summary": "Inferred from frontend method createAddressV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/addresses/{id}": {
+      "patch": {
+        "operationId": "editAddressV3",
+        "summary": "Inferred from frontend method editAddressV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "deleteAddressV3",
+        "summary": "Inferred from frontend method deleteAddressV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/coffee_ratings": {
+      "get": {
+        "operationId": "getCoffeesRatingsV3",
+        "summary": "Inferred from frontend method getCoffeesRatingsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "rateNewCoffeeV3",
+        "summary": "Inferred from frontend method rateNewCoffeeV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/coffee_ratings/last_coffee": {
+      "get": {
+        "operationId": "getRateLastCoffeeV3",
+        "summary": "Inferred from frontend method getRateLastCoffeeV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/me/coffee_ratings/{id}": {
+      "patch": {
+        "operationId": "editCoffeeRatingV3",
+        "summary": "Inferred from frontend method editCoffeeRatingV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/coffee_ratings/{id}/recurrables": {
+      "get": {
+        "operationId": "rateRecurrablesV3",
+        "summary": "Inferred from frontend method rateRecurrablesV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/coffees/always_send": {
+      "post": {
+        "operationId": "alwaysSendV3",
+        "summary": "Inferred from frontend method alwaysSendV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/coffees/whitelist": {
+      "post": {
+        "operationId": "whitelistV3",
+        "summary": "Inferred from frontend method whitelistV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/email": {
+      "patch": {
+        "operationId": "updateUserEmailV3",
+        "summary": "Inferred from frontend method updateUserEmailV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/invite": {
+      "post": {
+        "operationId": "sendEmailInvitesV3",
+        "summary": "Inferred from frontend method sendEmailInvitesV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/orders/history": {
+      "get": {
+        "operationId": "getOrdersHistoryV3",
+        "summary": "Inferred from frontend method getOrdersHistoryV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{id}": {
+      "get": {
+        "operationId": "getOrderDetailsV3",
+        "summary": "Inferred from frontend method getOrderDetailsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{id}/delay": {
+      "patch": {
+        "operationId": "delayOrderV3",
+        "summary": "Inferred from frontend method delayOrderV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{id}/gift": {
+      "patch": {
+        "operationId": "submitUserGiftOptionV3",
+        "summary": "Inferred from frontend method submitUserGiftOptionV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{id}/scheduler": {
+      "get": {
+        "operationId": "checkScheduleV3",
+        "summary": "Inferred from frontend method checkScheduleV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dispatch_on",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{order_id}/asap": {
+      "patch": {
+        "operationId": "asapOrderV3",
+        "summary": "Inferred from frontend method asapOrderV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{order_id}/available_product_addons": {
+      "get": {
+        "operationId": "orderAvailableProductAddonsV3",
+        "summary": "Inferred from frontend method orderAvailableProductAddonsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{order_id}/order_items": {
+      "post": {
+        "operationId": "addOrderAddonsV3",
+        "summary": "Inferred from frontend method addOrderAddonsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{order_id}/order_items/batch_destroy": {
+      "delete": {
+        "operationId": "deleteOrderAddonV3",
+        "summary": "Inferred from frontend method deleteOrderAddonV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{order_id}/order_items/{item_id}": {
+      "patch": {
+        "operationId": "updateOrderItemV3",
+        "summary": "Inferred from frontend method updateOrderItemV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{order_id}/reschedule": {
+      "patch": {
+        "operationId": "rescheduleOrderV3",
+        "summary": "Inferred from frontend method rescheduleOrderV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/orders/{order_id}/skip": {
+      "patch": {
+        "operationId": "skipOrderV3",
+        "summary": "Inferred from frontend method skipOrderV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/password": {
+      "patch": {
+        "operationId": "updateUserPasswordV3",
+        "summary": "Inferred from frontend method updateUserPasswordV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/payment_cards": {
+      "get": {
+        "operationId": "getCardsV3",
+        "summary": "Inferred from frontend method getCardsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "updateUserCardV3",
+        "summary": "Inferred from frontend method updateUserCardV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "description": "Frontend code comments indicate this call may hit base URL without /v3 prefix (temporary rollback)."
+      }
+    },
+    "/users/me/payment_cards/{card_id}/billing_address": {
+      "get": {
+        "operationId": "getCardAddressV3",
+        "summary": "Inferred from frontend method getCardAddressV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "card_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables": {
+      "post": {
+        "operationId": "createRecurrableV3",
+        "summary": "Inferred from frontend method createRecurrableV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/recurrables/paused": {
+      "get": {
+        "operationId": "getPausedRecurrablesV3",
+        "summary": "Inferred from frontend method getPausedRecurrablesV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/primary": {
+      "get": {
+        "operationId": "getPrimaryRecurrableV3",
+        "summary": "Inferred from frontend method getPrimaryRecurrableV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/switch_list": {
+      "get": {
+        "operationId": "getRecurrablesSwitchListV3",
+        "summary": "Inferred from frontend method getRecurrablesSwitchListV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}": {
+      "get": {
+        "operationId": "getRecurrablebyIdV3",
+        "summary": "Inferred from frontend method getRecurrablebyIdV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/address": {
+      "patch": {
+        "operationId": "updateRecurrableAddressV3",
+        "summary": "Inferred from frontend method updateRecurrableAddressV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/bag_size": {
+      "patch": {
+        "operationId": "updateRecurrableSizeV3",
+        "summary": "Inferred from frontend method updateRecurrableSizeV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/bag_sizes": {
+      "get": {
+        "operationId": "getRecurrableSizesV3",
+        "summary": "Inferred from frontend method getRecurrableSizesV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/brew_method": {
+      "patch": {
+        "operationId": "updateRecurrableBrewMethodV3",
+        "summary": "Inferred from frontend method updateRecurrableBrewMethodV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/cancel": {
+      "patch": {
+        "operationId": "cancelRecurrableV3",
+        "summary": "Inferred from frontend method cancelRecurrableV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/coffee_plan_amount": {
+      "patch": {
+        "operationId": "updateCancelPauseFlowPlanAmountV3",
+        "summary": "Inferred from frontend method updateCancelPauseFlowPlanAmountV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/coffee_plan_tier": {
+      "patch": {
+        "operationId": "updateCancelPauseFlowPlanTierV3",
+        "summary": "Inferred from frontend method updateCancelPauseFlowPlanTierV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/coffee_type": {
+      "patch": {
+        "operationId": "updateRecurrableCoffeeTypeV3",
+        "summary": "Inferred from frontend method updateRecurrableCoffeeTypeV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/coffee_types": {
+      "get": {
+        "operationId": "getRecurrableCoffeeTypesV3",
+        "summary": "Inferred from frontend method getRecurrableCoffeeTypesV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/coffees": {
+      "get": {
+        "operationId": "getRecurrableCoffeesV3",
+        "summary": "Inferred from frontend method getRecurrableCoffeesV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/frequency": {
+      "patch": {
+        "operationId": "updateRecurrableFrequencyV3",
+        "summary": "Inferred from frontend method updateRecurrableFrequencyV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/name": {
+      "patch": {
+        "operationId": "updateRecurrableNameV3",
+        "summary": "Inferred from frontend method updateRecurrableNameV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/pause": {
+      "patch": {
+        "operationId": "pauseRecurrableV3",
+        "summary": "Inferred from frontend method pauseRecurrableV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/retention_plans": {
+      "get": {
+        "operationId": "getRetentionPlans",
+        "summary": "Inferred from frontend method getRetentionPlans",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/tier": {
+      "patch": {
+        "operationId": "updateRecurrableTierV3",
+        "summary": "Inferred from frontend method updateRecurrableTierV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/tiers": {
+      "get": {
+        "operationId": "getRecurrableTiersV3",
+        "summary": "Inferred from frontend method getRecurrableTiersV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{id}/unpause": {
+      "patch": {
+        "operationId": "unPauseRecurrableV3",
+        "summary": "Inferred from frontend method unPauseRecurrableV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{recurrable_id}/addons": {
+      "get": {
+        "operationId": "availableProductAddonsV3",
+        "summary": "Inferred from frontend method availableProductAddonsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "recurrable_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{recurrable_id}/recurrable_addons": {
+      "post": {
+        "operationId": "addAddonsV3",
+        "summary": "Inferred from frontend method addAddonsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "recurrable_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "updateAddonsV3",
+        "summary": "Inferred from frontend method updateAddonsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "recurrable_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/recurrables/{recurrable_id}/recurrable_addons/{addon_id}": {
+      "delete": {
+        "operationId": "deleteAddonV3",
+        "summary": "Inferred from frontend method deleteAddonV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "recurrable_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "addon_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/users/me/referral_stats/": {
+      "get": {
+        "operationId": "referralStatsV3",
+        "summary": "Inferred from frontend method referralStatsV3",
+        "responses": {
+          "200": {
+            "description": "Successful response (schema unknown)"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  }
+}
