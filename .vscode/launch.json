@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Home Assistant (.dev_config)",
+      "type": "python",
+      "request": "launch",
+      "module": "homeassistant",
+      "preLaunchTask": "Link pact_coffee integration",
+      "args": [
+        "--config",
+        "${workspaceFolder}/.dev_config"
+      ],
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}
