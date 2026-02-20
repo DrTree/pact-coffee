@@ -77,7 +77,7 @@ class TestIntegrationApiV3(unittest.IsolatedAsyncioTestCase):
         await async_reschedule_order(session, token, '88', '2026-03-04')
 
         urls = [c[1] for c in session.calls]
-        self.assertIn(f'{API_BASE_URL}/{API_VERSION}/users/me/recurrables', urls)
+        self.assertIn(f'{API_BASE_URL}/{API_VERSION}/users/me/recurrables/switch_list', urls)
         self.assertIn(f'{API_BASE_URL}/{API_VERSION}/users/me/orders/88/asap', urls)
         self.assertIn(f'{API_BASE_URL}/{API_VERSION}/users/me/orders/88/reschedule', urls)
 

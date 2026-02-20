@@ -49,7 +49,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: PactConfigEntry) -> bool
 
     async def perform_update() -> PactCoordinatorData:
         recurrables = await async_fetch_recurrables(session, token)
+        _LOGGER.debug("Fetched %s recurrables from Pact", len(recurrables))
         active = [r for r in recurrables if r.get("current_state") != "paused" and r.get("current_order")]
+        _LOGGER.debug("Active recurrables with current order: %s", len(active))
         by_name = {r["name"]: r for r in active if r.get("name")}
         return PactCoordinatorData(recurrables=active, recurrables_by_name=by_name)
 
