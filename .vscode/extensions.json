@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "redhat.vscode-yaml",
+    "esbenp.prettier-vscode",
+    "ms-vscode-remote.remote-wsl",
+    "ms-azuretools.vscode-docker",
+    "keesschollaart.vscode-home-assistant",
+    "openai.chatgpt"
+  ],
+  "unwantedRecommendations": []
+}

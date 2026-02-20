@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Link pact_coffee integration",
+      "type": "shell",
+      "command": "mkdir -p \"${workspaceFolder}/.dev_config/custom_components\" && ln -sfn \"${workspaceFolder}\" \"${workspaceFolder}/.dev_config/custom_components/pact_coffee\"",
+      "problemMatcher": []
+    }
+  ]
+}
