@@ -20,7 +20,7 @@ _LOGGER = logging.getLogger(__name__)
 
 # TODO List the platforms that you want to support.
 # For your initial PR, limit it to 1 platform.
-PLATFORMS: list[Platform] = [Platform.DATE]
+PLATFORMS: list[Platform] = [Platform.DATE, Platform.BUTTON]
 
 
 def _normalize_recurrables(payload: Any) -> list[dict[str, Any]]:
