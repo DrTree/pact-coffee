@@ -1,21 +1,20 @@
+"""Date platform for Pact Coffee orders."""
+
+from __future__ import annotations
+
 from datetime import date
 import logging
 from typing import Any
 
-from homeassistant.helpers.device_registry import DeviceInfo
-
-from .pact.api import PactApiClient
 from homeassistant.components.date import DateEntity
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
-from homeassistant.helpers import config_validation as cv, entity_platform, service
+from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
 
-from . import PactConfigEntry, PactCoordinatorData
-from . import DOMAIN
+from . import DOMAIN, PactConfigEntry, PactCoordinatorData
+from .api_v3 import async_order_asap, async_reschedule_order
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,51 +25,37 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up entry."""
-    _LOGGER.debug("Starting platform setup")
-    coordinator: DataUpdateCoordinator[PactCoordinatorData] = (
-        config_entry.runtime_data.coordinator
-    )
+    coordinator: DataUpdateCoordinator[PactCoordinatorData] = config_entry.runtime_data.coordinator
     platform = entity_platform.async_get_current_platform()
-
     platform.async_register_entity_service("asap", {}, "async_dispatch_asap")
 
-    d = [
-        PactDeliveryDate(k, v.id, coordinator, config_entry.runtime_data.client)
-        for k, v in coordinator.data.reccurables_dict.items()
-        if v.active
+    entities = [
+        PactDeliveryDate(name, coordinator, config_entry)
+        for name in coordinator.data.recurrables_by_name
     ]
-    async_add_entities(d, True)
-    _LOGGER.debug("Finished platform setup")
+    async_add_entities(entities, True)
 
 
 class PactDeliveryDate(
     CoordinatorEntity[DataUpdateCoordinator[PactCoordinatorData]], DateEntity
 ):
-    """Entity implementation for the delivery date of next order."""
+    """Entity implementation for next delivery date."""
 
-    # Implement one of these methods.
-    _api: PactApiClient
-
-    # TODO: Pass in the coordinator and pass on to the super
     def __init__(
         self,
         name: str,
-        id: str,
         coordinator: DataUpdateCoordinator[PactCoordinatorData],
-        api: PactApiClient,
-        context: Any = None,
+        config_entry: PactConfigEntry,
     ) -> None:
-        """Init..."""
-        _LOGGER.debug(f"Starting inner setup for {name} - {id}")
-        super().__init__(coordinator, context)
-        self._attr_unique_id = id
+        super().__init__(coordinator)
         self._name = name
-        self._api = api
+        self._config_entry = config_entry
+        recurrable = coordinator.data.recurrables_by_name[name]
+        self._attr_unique_id = str(recurrable.get("id"))
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, id)},
+            identifiers={(DOMAIN, str(recurrable.get("id")))},
             name=self.name,
         )
-        _LOGGER.debug(f"Finished inner setup for {name} - {id}")
 
     @property
     def name(self) -> str:
@@ -79,20 +64,34 @@ class PactDeliveryDate(
 
     @property
     def native_value(self) -> date | None:
-        """Return the value reported by the date."""
-        recurrable = self.coordinator.data.reccurables_dict[self._name]
-        return recurrable.current_order.dispatch_on
-
-    async def async_dispatch_asap(self, **kwargs: Any) -> None:
-        """."""
-        recurrable = self.coordinator.data.reccurables_dict[self._name]
-        orderId = recurrable.current_order.id
-        await self._api.asap(recurrable)
-        await self.coordinator.async_refresh()
-        return True
+        """Return next dispatch date."""
+        recurrable = self.coordinator.data.recurrables_by_name.get(self._name)
+        if not recurrable:
+            return None
+        dispatch_on = recurrable.get("current_order", {}).get("dispatch_on")
+        if not dispatch_on:
+            return None
+        return date.fromisoformat(dispatch_on)
 
     async def async_set_value(self, value: date) -> None:
         """Update the current value."""
-        recurrable = self.coordinator.data.reccurables_dict[self._name]
-        await self._api.update_delivery_date(recurrable, value)
+        recurrable = self.coordinator.data.recurrables_by_name[self._name]
+        order_id = str(recurrable["current_order"]["id"])
+        await async_reschedule_order(
+            self._config_entry.runtime_data.session,
+            self._config_entry.runtime_data.token,
+            order_id,
+            value.isoformat(),
+        )
+        await self.coordinator.async_refresh()
+
+    async def async_dispatch_asap(self) -> None:
+        """Dispatch this order ASAP."""
+        recurrable = self.coordinator.data.recurrables_by_name[self._name]
+        order_id = str(recurrable["current_order"]["id"])
+        await async_order_asap(
+            self._config_entry.runtime_data.session,
+            self._config_entry.runtime_data.token,
+            order_id,
+        )
         await self.coordinator.async_refresh()
