@@ -5,30 +5,41 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import timedelta
 import logging
+from typing import Any
 
+from aiohttp.client_exceptions import ClientConnectionError
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import aiohttp_client
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .pact.api import PactApiClient
-from .pact.model import Recurable
+from .pact.asyncio_api import PactAsyncioApi
 
 _LOGGER = logging.getLogger(__name__)
 
 # TODO List the platforms that you want to support.
 # For your initial PR, limit it to 1 platform.
-PLATFORMS: list[Platform] = [Platform.DATE]
+PLATFORMS: list[Platform] = [Platform.DATE, Platform.BUTTON]
 
-# TODO: Import this
-DOMAIN = "pact_coffee"
+
+def _normalize_recurrables(payload: Any) -> list[dict[str, Any]]:
+    """Normalize recurrables payloads returned by Pact endpoints."""
+    if isinstance(payload, list):
+        return [item for item in payload if isinstance(item, dict)]
+    if isinstance(payload, dict):
+        recurrables = payload.get("recurrables")
+        if isinstance(recurrables, list):
+            return [item for item in recurrables if isinstance(item, dict)]
+        if isinstance(recurrables, dict):
+            return [item for item in recurrables.values() if isinstance(item, dict)]
+    return []
 
 
 @dataclass
 class PactCoordinatorData:
-    recurrables: list[Recurable]
-    reccurables_dict: dict[str, Recurable]
+    recurrables: list[dict[str, Any]]
+    recurrables_dict: dict[str, dict[str, Any]]
 
 
 # type MyCoordinator = DataUpdateCoordinator[PactCoordinatorData]
@@ -37,7 +48,7 @@ class PactCoordinatorData:
 @dataclass
 class PactRuntimeData:
     coordinator: DataUpdateCoordinator[PactCoordinatorData]
-    client: PactApiClient
+    client: PactAsyncioApi
 
 
 # TODO Create ConfigEntry type alias with API object
@@ -54,15 +65,36 @@ async def async_setup_entry(hass: HomeAssistant, entry: PactConfigEntry) -> bool
     # TODO 3. Store an API object for your platforms to access
     # entry.runtime_data = MyAPI(...)
 
-    _LOGGER.info(entry.data)
     session = aiohttp_client.async_get_clientsession(hass, verify_ssl=False)
-    api = PactApiClient(session, entry.data["username"], entry.data["password"])
-    await api.get_token()
+    api = PactAsyncioApi(session)
+
+    async def _login() -> None:
+        await api.login(entry.data["username"], entry.data["password"])
+
+    async def _fetch_recurrables() -> list[dict[str, Any]]:
+        switch_list = _normalize_recurrables(await api.get_recurrables_switch_list())
+        detailed: list[dict[str, Any]] = []
+        for item in switch_list:
+            recurrable_id = item.get("id")
+            if not recurrable_id:
+                continue
+            recurrable = await api.get_recurrable_by_id(str(recurrable_id))
+            if isinstance(recurrable, dict) and recurrable:
+                detailed.append(recurrable)
+        return detailed
+
+    await _login()
 
     async def perform_update():
-        recurrables = await api.recurrables()
+        try:
+            recurrables = await _fetch_recurrables()
+        except ClientConnectionError:
+            await _login()
+            recurrables = await _fetch_recurrables()
+
         return PactCoordinatorData(
-            recurrables=recurrables, reccurables_dict={r.name: r for r in recurrables}
+            recurrables=recurrables,
+            recurrables_dict={str(r["id"]): r for r in recurrables if isinstance(r, dict) and "id" in r},
         )
 
     # async def handle_service_asap(call):

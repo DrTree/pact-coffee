@@ -4,7 +4,6 @@ from typing import Any
 
 from homeassistant.helpers.device_registry import DeviceInfo
 
-from .pact.api import PactApiClient
 from homeassistant.components.date import DateEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -12,12 +11,20 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
 )
-from homeassistant.helpers import config_validation as cv, entity_platform, service
+from homeassistant.helpers import entity_platform
 
 from . import PactConfigEntry, PactCoordinatorData
-from . import DOMAIN
+from .const import DOMAIN
+from .pact.asyncio_api import PactAsyncioApi
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _is_recurrable_active(recurrable: dict[str, Any]) -> bool:
+    """Return whether a recurrable should create an entity."""
+    if recurrable.get("active") is True:
+        return True
+    return str(recurrable.get("current_state", "")).lower() == "active"
 
 
 async def async_setup_entry(
@@ -35,9 +42,14 @@ async def async_setup_entry(
     platform.async_register_entity_service("asap", {}, "async_dispatch_asap")
 
     d = [
-        PactDeliveryDate(k, v.id, coordinator, config_entry.runtime_data.client)
-        for k, v in coordinator.data.reccurables_dict.items()
-        if v.active
+        PactDeliveryDate(
+            str(recurrable.get("id")),
+            str(recurrable.get("name", recurrable.get("id"))),
+            coordinator,
+            config_entry.runtime_data.client,
+        )
+        for recurrable in coordinator.data.recurrables_dict.values()
+        if _is_recurrable_active(recurrable)
     ]
     async_add_entities(d, True)
     _LOGGER.debug("Finished platform setup")
@@ -49,15 +61,15 @@ class PactDeliveryDate(
     """Entity implementation for the delivery date of next order."""
 
     # Implement one of these methods.
-    _api: PactApiClient
+    _api: PactAsyncioApi
 
     # TODO: Pass in the coordinator and pass on to the super
     def __init__(
         self,
-        name: str,
         id: str,
+        name: str,
         coordinator: DataUpdateCoordinator[PactCoordinatorData],
-        api: PactApiClient,
+        api: PactAsyncioApi,
         context: Any = None,
     ) -> None:
         """Init..."""
@@ -65,6 +77,7 @@ class PactDeliveryDate(
         super().__init__(coordinator, context)
         self._attr_unique_id = id
         self._name = name
+        self._id = id
         self._api = api
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, id)},
@@ -80,19 +93,44 @@ class PactDeliveryDate(
     @property
     def native_value(self) -> date | None:
         """Return the value reported by the date."""
-        recurrable = self.coordinator.data.reccurables_dict[self._name]
-        return recurrable.current_order.dispatch_on
+        recurrable = self.coordinator.data.recurrables_dict.get(self._id, {})
+        current_order = recurrable.get("current_order") or {}
+        dispatch_on = current_order.get("dispatch_on")
+        if not dispatch_on:
+            return None
+        if isinstance(dispatch_on, date):
+            return dispatch_on
+        try:
+            return date.fromisoformat(str(dispatch_on).split("T", maxsplit=1)[0])
+        except ValueError:
+            return None
 
     async def async_dispatch_asap(self, **kwargs: Any) -> None:
         """."""
-        recurrable = self.coordinator.data.reccurables_dict[self._name]
-        orderId = recurrable.current_order.id
-        await self._api.asap(recurrable)
+        recurrable = self.coordinator.data.recurrables_dict.get(self._id, {})
+        current_order = recurrable.get("current_order") or {}
+        order_id = current_order.get("id")
+        if order_id is None:
+            return
+        await self._api.asap_order(order_id)
         await self.coordinator.async_refresh()
-        return True
 
     async def async_set_value(self, value: date) -> None:
         """Update the current value."""
-        recurrable = self.coordinator.data.reccurables_dict[self._name]
-        await self._api.update_delivery_date(recurrable, value)
+        recurrable = self.coordinator.data.recurrables_dict.get(self._id, {})
+        current_order = recurrable.get("current_order") or {}
+        order_id = current_order.get("id")
+        if order_id is None:
+            return
+
+        payload = {"dispatch_on": value.isoformat()}
+        if "amount" in recurrable:
+            payload["amount"] = recurrable.get("amount")
+        if "coffee_sku" in current_order:
+            payload["coffee_sku"] = current_order.get("coffee_sku")
+        if "item_id" in current_order:
+            payload["item_id"] = current_order.get("item_id")
+        payload["order_id"] = order_id
+
+        await self._api.reschedule_order(order_id, payload)
         await self.coordinator.async_refresh()
