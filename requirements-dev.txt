@@ -1,5 +1,1 @@
-homeassistant
-charset-normalizer~=2.0.0
-wheel
-urllib3<1.27
-pyOpenSSL<22
+homeassistant==2026.2.2
