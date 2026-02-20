@@ -3,14 +3,22 @@
 from __future__ import annotations
 
 import logging
+import os
 from typing import Any
 
 from aiohttp import ClientSession
 from aiohttp.client_exceptions import ClientConnectionError
 
-API_BASE_URL = "https://api.pactcoffee.com"
-API_VERSION = "v3"
+API_BASE_URL = os.getenv("PACT_API_BASE", "https://api.pactcoffee.com")
+API_VERSION = os.getenv("PACT_API_VERSION", "v3")
 _LOGGER = logging.getLogger(__name__)
+
+
+def _build_url(path: str) -> str:
+    base = API_BASE_URL.rstrip("/")
+    version = API_VERSION.strip("/")
+    suffix = path if path.startswith("/") else f"/{path}"
+    return f"{base}/{version}{suffix}"
 
 
 async def async_authenticate(
@@ -19,7 +27,7 @@ async def async_authenticate(
     password: str,
 ) -> str:
     """Get a v3 API token."""
-    url = f"{API_BASE_URL}/{API_VERSION}/tokens"
+    url = _build_url("/tokens")
     _LOGGER.debug("Authenticating against %s", url)
     async with session.post(url, json={"email": username, "password": password}, timeout=30) as response:
         _LOGGER.debug("Auth response status=%s", response.status)
@@ -45,7 +53,7 @@ async def async_api_request(
     json_body: dict[str, Any] | None = None,
 ) -> dict[str, Any] | list[dict[str, Any]]:
     """Make an authenticated v3 API request."""
-    url = f"{API_BASE_URL}/{API_VERSION}{path}"
+    url = _build_url(path)
     _LOGGER.debug("Pact API request method=%s url=%s", method, url)
     async with session.request(
         method,

@@ -5,6 +5,7 @@ from aiohttp.client_exceptions import ClientConnectionError
 from api_v3 import (
     API_BASE_URL,
     API_VERSION,
+    _build_url,
     async_authenticate,
     async_fetch_recurrables,
     async_order_asap,
@@ -50,6 +51,13 @@ class FakeSession:
         return FakeCtx(self.response)
 
 
+class TestUrlBuilder(unittest.TestCase):
+    def test_build_url_normalizes_slashes(self):
+        expected = f"{API_BASE_URL.rstrip('/')}/{API_VERSION.strip('/')}/tokens"
+        self.assertEqual(_build_url('tokens'), expected)
+        self.assertEqual(_build_url('/tokens'), expected)
+
+
 class TestIntegrationApiV3(unittest.IsolatedAsyncioTestCase):
     async def test_async_authenticate_success(self):
         session = FakeSession(FakeResponse(payload={'token': {'id': 'token123'}}))
@@ -57,7 +65,7 @@ class TestIntegrationApiV3(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(token, 'token123')
         method, url, kwargs = session.calls[0]
         self.assertEqual(method, 'POST')
-        self.assertEqual(url, f'{API_BASE_URL}/{API_VERSION}/tokens')
+        self.assertEqual(url, f'{API_BASE_URL.rstrip('/')}/{API_VERSION.strip('/')}/tokens')
         self.assertEqual(kwargs['json'], {'email': 'user', 'password': 'pass'})
 
     async def test_async_authenticate_failure(self):
@@ -77,9 +85,10 @@ class TestIntegrationApiV3(unittest.IsolatedAsyncioTestCase):
         await async_reschedule_order(session, token, '88', '2026-03-04')
 
         urls = [c[1] for c in session.calls]
-        self.assertIn(f'{API_BASE_URL}/{API_VERSION}/users/me/recurrables/switch_list', urls)
-        self.assertIn(f'{API_BASE_URL}/{API_VERSION}/users/me/orders/88/asap', urls)
-        self.assertIn(f'{API_BASE_URL}/{API_VERSION}/users/me/orders/88/reschedule', urls)
+        base = f'{API_BASE_URL.rstrip('/')}/{API_VERSION.strip('/')}'
+        self.assertIn(f'{base}/users/me/recurrables/switch_list', urls)
+        self.assertIn(f'{base}/users/me/orders/88/asap', urls)
+        self.assertIn(f'{base}/users/me/orders/88/reschedule', urls)
 
 
 if __name__ == '__main__':

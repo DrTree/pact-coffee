@@ -14,7 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import aiohttp_client
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .api_v3 import async_authenticate, async_fetch_recurrables
+from .api_v3 import API_BASE_URL, API_VERSION, async_authenticate, async_fetch_recurrables
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -41,6 +41,7 @@ type PactConfigEntry = ConfigEntry[PactRuntimeData]  # noqa: F821
 async def async_setup_entry(hass: HomeAssistant, entry: PactConfigEntry) -> bool:
     """Set up pact from a config entry."""
     session = aiohttp_client.async_get_clientsession(hass)
+    _LOGGER.debug("Using Pact API base=%s version=%s", API_BASE_URL, API_VERSION)
     token = await async_authenticate(
         session,
         entry.data[CONF_USERNAME],
