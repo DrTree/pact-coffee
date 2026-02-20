@@ -128,3 +128,18 @@ Authenticated requests add:
 
 A new asyncio-first client has been added at `pact/asyncio_api.py`. It mirrors the analyzed v3 user/recurrable/order API routes, uses bearer token auth, and provides a small typed facade around common operations.
 
+
+
+## V3 parity check against Python asyncio client
+
+The `pact/asyncio_api.py` client now includes methods corresponding to all v3 methods present in the recovered front-end `users.js` module, including:
+
+- auth (`login_v3`, `logout_v3`)
+- profile/cards/addresses (`get_user_info_v3`, `get_cards_v3`, `get_addresses_v3`, etc.)
+- recurrable lifecycle and plan mutation endpoints
+- order scheduling/actions (`asap`, `delay`, `skip`, `reschedule`, scheduler check, addons)
+- ratings/preferences, referral, invite, voucher operations
+
+Special-case behavior retained to match front-end behavior:
+
+- `update_user_card_v3` targets `/users/me/payment_cards` on the **base URL without `/v3`**, mirroring the JS comment and call path.
